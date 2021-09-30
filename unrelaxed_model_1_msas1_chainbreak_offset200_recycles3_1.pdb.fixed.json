@@ -1,0 +1,1 @@
+{"DockQ": 0.968663043235523, "irms": 0.3520721919708914, "Lrms": 0.8341372883533363, "fnat": 0.967742, "nat_correct": 30, "nat_total": 31, "fnonnat": 0.117647, "nonnat_count": 4, "model_total": 34, "chain1": "A", "chain2": "B", "len1": 185, "len2": 8, "class1": "receptor", "class2": "ligand"}
