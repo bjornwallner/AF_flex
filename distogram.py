@@ -79,7 +79,7 @@ def peakdet(v, delta, x = None):
     return array(maxtab), array(mintab)
 
 
-# In[9]:
+# In[22]:
 
 
 import numpy as np
@@ -89,6 +89,10 @@ import matplotlib.pyplot as plt
 def softmax(x):
     f_x = np.exp(x) / np.sum(np.exp(x))
     return f_x
+def expit(x):
+
+    f_x=1/(1+np.exp(-x)) 
+    return f_x
 
 pickle_file='result_model_1_msas1_chainbreak_offset200_recycles3_1.pkl'
 results=pickle.load(open(pickle_file,'rb'))
@@ -96,29 +100,41 @@ print(results['distogram'].keys())
 bin_edges=results['distogram']['bin_edges']
 bin_size=bin_edges[1]-bin_edges[0]
 #convert the bin_edges to bin_centers
+print(bin_edges)
 x=bin_edges+bin_size/2
+print(x)
+print(bin_size)
 #Add the first bin center to the begining of x to complete the conversion
 first_bin=bin_edges[0]-bin_size/2
 x=np.insert(x,0,first_bin)
+print(bin_edges)
+
+
+# In[35]:
+
 
 distogram=results['distogram']['logits']
 print(results['distogram']['logits'].shape)
 print(len(x))
 #Took a random position that I know was in contact just to get something
-pos1=160
-pos2=100
+pos1=5
+pos2=28
 y=distogram[pos1-1][pos2-1]
 #the distogram are logits and need to be converted to probablity using softmax
 #
 prob=softmax(y)
+#prob2=expit(y)
+#print(y)
+#print(prob)
 plt.plot(x,prob)
+#plt.plot(x,prob2)
 #plt.plot(x,y_S)
 plt.show()
 (maxima,minima)=peakdet(prob,0.03,x)
 maxima
 
 
-# In[12]:
+# In[51]:
 
 
 #Example Search for all maximas
@@ -129,10 +145,17 @@ for i in range(N):
         if j<=i: #skipping symmetric pairs
             continue
         prob=softmax(distogram[i][j])
+        #prob=expit(distogram[i][j])
         (maxima,minima)=peakdet(prob,0.03,x)
         n=len(maxima)
-        if(n >0):
-            print(f'Found {n} maxima for pair {i+1},{j+1}: {maxima}')
+        if(n >1):
+            print(f'Found {n} maxima for pair {i+1},{j+1}: {maxima.flatten().tolist()}')
         #print(len(maxima))
-        #print(maxima)
+            print(maxima.shape)
+
+
+# In[ ]:
+
+
+
 
